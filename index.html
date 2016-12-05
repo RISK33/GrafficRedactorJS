@@ -1,0 +1,137 @@
+<!DOCTYPE HTML>
+<html>
+ <head>
+  <meta charset="utf-8">
+  <title>Графический редактор</title>
+  <script src="js/jquery-1.11.2.min.js"></script>
+ </head>
+ <body>
+  <p style="text-align: left;">
+       <button><img class = "hideButtons" src="Pictures/788507.jpg" alt="Линия" 
+          style="vertical-align: left" onclick="addLine()"></button></p>
+      <button><img class = "hideButtons" src="Pictures/788502.png" alt="Треугольник" 
+              style="vertical-align: left" onclick="addTriangle()"></button></p>
+      <button><img class = "hideButtons" src="Pictures/788509.png" alt="Прямоугольник" 
+              style="vertical-align: left" onclick="addRectangle()"></button></p>
+      <button><img class = "hideButtons" src="Pictures/788510.png" alt="Окружность" 
+              style="vertical-align: left" onclick="addCircle()"></button></p>
+      <button><img class = "hideButtons" src="Pictures/788800.png" alt="Удалить элемент" 
+              style="vertical-align: left" onclick="deleteElement()"></button></p>
+      <button><img class = "hideButtons" src="Pictures/save.png" alt="Сохранить лист" 
+              style="vertical-align: left" onclick="save()"></button></p>
+      <button><img class = "hideButtons" src="Pictures/load.png" alt="Загрузить лист" 
+              style="vertical-align: left" onclick="load()"></button></p>
+      <button><img id = "showButton" src="Pictures/show.png" alt="Просмотр" 
+              style="vertical-align: left" onclick="show()"></button></p>
+      <button><img id = "morfingButton" class = "hideButtons" src="Pictures/morfing.png" alt="Морфинг" 
+              style="vertical-align: left" onclick="morfing()"></button></p>
+  <p1 align="">
+      <canvas id='draw' width='1200' height='750'></canvas>
+      <script src = "js/Point.js"></script>
+      <script src = "js/Triangle.js"></script>
+      <script src = "js/Rectangle.js"></script>
+      <script src = "js/Circle.js"></script>
+      <script src = "js/Line.js"></script>
+      <script src = "js/code.js"></script>
+      </p1> 
+      <p2><input type="radio" name="mode" value="local" checked onchange="check()">Локальный режим</p2>
+      <p3><input type="radio" name="mode" value="global" onchange="check()">Глобальный режим</p3>
+      <p4><div id = "info" class="content"></div></p4>
+      <p5><input type="color" value="цвет" name="color" onchange= "changeColor()">
+      <input type="submit" value="Выбрать" onclick = "changeColor()"></p5>
+      <p6><button><img class = "hideButtons" src="Pictures/fractal.png" alt='Фрактал "Чёртова лестница"' 
+              style="vertical-align: left" onclick="fractal(0)"></button>
+   <style type="text/css">
+   	p1 {
+	position:absolute;
+	top: 10px;
+	left: 100px;
+	}
+	p2 {
+		position: absolute;
+		top: 10px;
+		left: 1350px;
+	}
+	p3 {
+		position: absolute;
+		top: 40px;
+		left: 1350px;
+	}
+	p4 {
+		position: absolute;
+		top: 70px;
+		left: 1350px;
+	}
+	p5 {
+		position: absolute;
+		top: 130px;
+		left: 1350px;
+	}
+	p6 {
+		position: absolute;
+		top: 200px;
+		left: 1350px;
+	}
+.overlay {
+	background: #000;
+	position: fixed;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+	z-index: 1000;
+	opacity: .5;
+}
+.visible {
+	background: #fff;
+	position: fixed;
+	left: 50%;
+	top: 50%;
+	margin-top: -200px;
+	overflow: hidden;
+	z-index: 2000;
+	width: 500px;
+	padding: 0px;
+	margin-left: -250px;
+}
+#win button {
+	float: right;
+	line-height: 20px;
+	margin: 1.2em;
+	border: none;
+	background: transparent;
+	color: blue;
+}
+#win button[type="button"]:hover {
+	cursor: pointer;
+	color: navy;
+	text-decoration: underline;
+}
+#win h3 {
+	text-align: center;
+	color: #555;
+}
+.content {
+	padding: 0 1em;
+	border-top: 1px solid #ccc;
+	border-bottom: 1px solid #ccc;
+	background: WhiteSmoke;
+}
+   </style>
+   <style type="text/css">
+   	  canvas {
+   	  	cursor: pointer;
+   	  }
+   </style>
+<div id="win" style="display:none;">   
+<div class="overlay"></div>
+      <div id = ""win2" class="visible">
+        <h2>Вспомогательное окно</h2>
+          <div id = "win3" class="content">
+            
+          </div>
+        <button id = "buttonOk" type="button" onClick='getElementById("win").style.display="none"; if (action.localeCompare("load") == 0) loadList(); else if (action.localeCompare("show") == 0) showLists(); else morfingLists();'>Загрузить</button>
+    </div>
+</div>
+ </body>
+</html>
