@@ -40,7 +40,8 @@ function Rectangle(p1, p2) {
                                  + "n" + this.p2.toString() 
                                  + "n" + this.p3.toString()
                                  + "n" + this.p4.toString()
-                                 + "n" + this.color;
+                                 + "n" + this.color
+                                 + "n" + this.layer;
     }
 
 	this.shift = function(x, y) {

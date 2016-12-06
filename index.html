@@ -37,16 +37,20 @@
       <p2><input type="radio" name="mode" value="local" checked onchange="check()">Локальный режим</p2>
       <p3><input type="radio" name="mode" value="global" onchange="check()">Глобальный режим</p3>
       <p4><div id = "info" class="content"></div></p4>
+      <div class = "hideButtons">
       <p5><input type="color" value="цвет" name="color" onchange= "changeColor()">
       <input type="submit" value="Выбрать" onclick = "changeColor()"></p5>
-      <p6><button><img class = "hideButtons" src="Pictures/fractal.png" alt='Фрактал "Чёртова лестница"' 
+      <p6><button><img src="Pictures/fractal.png" alt='Фрактал "Чёртова лестница"' 
               style="vertical-align: left" onclick="fractal(0)"></button></p6>
       <p7>
       <a href="#" class="button15" onclick="onFrontLayer()">На передний план</a>
       <p8><a href="#" class="button15" onclick="onBackLayer()">На задний план</a></p8>
+      </p7>
+      <p9>
       <p8><a href="#" class="button15" onclick="upLayer()">Вперед</a></p8>
       <p8><a href="#" class="button15" onclick="downLayer()">Назад</a></p8>
-      </p7>
+      </p9>
+      </div>
    <style type="text/css">
    	p1 {
 	position:absolute;
@@ -85,6 +89,11 @@
 	}
 	p8 {
 		position: relative;
+	}
+	p9 {
+		position: absolute;
+		top: 380px;
+		left: 1350px;
 	}
 a.button15 {
 	width: 120px;

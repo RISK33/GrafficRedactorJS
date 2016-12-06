@@ -19,7 +19,8 @@ function Triangle(p1, p2, p3) {
     	return "Треугольник: " + "n" + this.p1.toString() 
                                  + "n" + this.p2.toString() 
                                  + "n" + this.p3.toString()
-                                 + "n" + this.color;
+                                 + "n" + this.color  
+                                 + "n" + this.layer;
    }
 
     this.getColor = function() {

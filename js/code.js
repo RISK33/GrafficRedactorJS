@@ -373,6 +373,7 @@ function ArrayToString() {
 }
 
 function StringToArray(stroke) {
+  maxLayer = 0;
 	var arrayList = [];
 	var strokeArray = stroke.split('|');
 	strokeArray.pop();
@@ -384,6 +385,9 @@ function StringToArray(stroke) {
 			var newPoint = new Point(parseFloat(xAndY[0].substring(4)),parseFloat(xAndY[1].substring(5)));
 		  var newCircle = new Circle(newPoint,rad);
       var color = points[3];
+      var layer = points[4];
+      newCircle.setLayer(layer);
+      if (layer > maxLayer) maxLayer = layer;
       newCircle.setColor(color);
 		  arrayList.push(newCircle);
 		} else if (strokeArray[i].substr(0,1).localeCompare("П") == 0) {
@@ -394,6 +398,9 @@ function StringToArray(stroke) {
 			var newPoint2 = new Point(parseFloat(xAndY2[0].substring(4)),parseFloat(xAndY2[1].substring(5)));
 			var newRectangle = new Rectangle(newPoint1,newPoint2);
       var color = points[5];
+      var layer = points[6];
+      if (layer > maxLayer) maxLayer = layer;
+      newRectangle.setLayer(layer);
       newRectangle.setColor(color);
 			arrayList.push(newRectangle);
 		} else if (strokeArray[i].substr(0,2).localeCompare("От") == 0) {
@@ -404,6 +411,9 @@ function StringToArray(stroke) {
       var newPoint2 = new Point(parseFloat(xAndY2[0].substring(4)),parseFloat(xAndY2[1].substring(5)));
       var newLine = new Line(newPoint1,newPoint2);
       var color = points[3];
+      var layer = points[4];
+      if (layer > maxLayer) maxLayer = layer;
+      newLine.setLayer(layer);
       newLine.setColor(color);
       arrayList.push(newLine);
     } else if (strokeArray[i].substr(0,1).localeCompare("Т") == 0) {
@@ -416,6 +426,9 @@ function StringToArray(stroke) {
       var newPoint3 = new Point(parseFloat(xAndY3[0].substring(4)),parseFloat(xAndY3[1].substring(5)));
       var newTriangle = new Triangle(newPoint1,newPoint2,newPoint3);
       var color = points[4];
+      var layer = points[5];
+      if (layer > maxLayer) maxLayer = layer;
+      newTriangle.setLayer(layer);
       newTriangle.setColor(color);
       arrayList.push(newTriangle);
     }
@@ -439,6 +452,7 @@ function pushing() {
 }
 
 function fractal() {
+  maxLayer = 0;
   g2d.clearRect(1,1,1198,748);
   $(".hideButtons").hide();
   condShow = true;
@@ -579,20 +593,28 @@ function recountFractal() {
  
 function save() {
 	var listName = prompt("Введите название листа:");
+  if (listName == null || listName.localeCompare("") == 0) {
+    return;
+  }
   createCookie(listName,ArrayToString(),60);
   var listArrays = readCookie("ListArrays");
-  var st = listArrays.split(',');
-  for (var i = 0; i < st.length; i++) {
-    listName += "," + st[i];
+  if (listArrays != null) {
+    var st = listArrays.split(',');
+    for (var i = 0; i < st.length; i++) {
+      listName += "," + st[i];
+    }
   }
   createCookie("ListArrays",listName,60);
-
 }
 
 function load() {
   selectedElements = [];
   action = "load";
   var listArrays = readCookie("ListArrays");
+  if (listArrays == null) {
+    alert("В вашем браузере нет сохраненных листов!");
+    return;
+  }
   document.getElementById('win').removeAttribute('style');
   var tmp = document.getElementById('win3');
   var st = listArrays.split(',');
@@ -635,14 +657,19 @@ function show () {
     frac = false;
     var tmp = document.getElementById("info");
     tmp.innerHTML = "";
+    maxLayer = 0;
     repaint();
   } else {
+    var listArrays = readCookie("ListArrays");
+    if (listArrays == null) {
+      alert("В вашем браузере нет сохраненных листов!");
+      return;
+    }
     selectedElements = [];
     selectedIndexs = [];
     select = false;
     repaint();
     action = "show";
-    var listArrays = readCookie("ListArrays");
     document.getElementById('win').removeAttribute('style');
     var tmp = document.getElementById('win3');
     var st = listArrays.split(',');
@@ -690,12 +717,16 @@ function showSelectLists(ff) {
 }
 
 function morfing(){
+  var listArrays = readCookie("ListArrays");
+  if (listArrays == null) {
+      alert("В вашем браузере нет сохраненных листов!");
+      return;
+    }
   selectedElements = [];
   selectedIndexs = [];
   select = false;
   repaint();
   action = "morfing";
-  var listArrays = readCookie("ListArrays");
   document.getElementById('win').removeAttribute('style');
   var tmp = document.getElementById('win3');
   var st = listArrays.split(',');

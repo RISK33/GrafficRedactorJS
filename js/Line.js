@@ -17,7 +17,8 @@ function Line(p1, p2) {
     this.toString = function() {
     	return "Отрезок: " + "n" + this.p1.toString() 
     	                   + "n" + this.p2.toString()
-                           + "n" + this.color;
+                           + "n" + this.color
+                           + "n" + this.layer;
     }
 
     this.getColor = function() {

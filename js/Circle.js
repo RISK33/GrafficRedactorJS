@@ -16,7 +16,8 @@ function Circle(pC, radius) {
     this.toString = function() {
     	return "Окружность: " + "n" + "X = " + pC.x + ", Y = " + pC.y 
                               + "n" + this.radius
-                              + "n" + this.color;
+                              + "n" + this.color
+                              + "n" + this.layer;
     }
     this.getColor = function() {
         return this.color;
