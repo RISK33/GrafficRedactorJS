@@ -45,6 +45,7 @@ var temp = [];
 var countRectangles = 0;
 var iterationCount;
 var maxLayer = 0;
+var prevLayer = 0;
 
 
 function addRectangle() {
@@ -55,7 +56,7 @@ function addRectangle() {
   var tempObject = new Rectangle(new Point(x1,y1),new Point(x2,y2));
   tempObject.setLayer(++maxLayer);
 	mainArray.push(tempObject);
-  console.log(maxLayer);
+  // console.log(maxLayer);
 	repaint();
 }
 
@@ -67,7 +68,7 @@ function addLine() {
   var tempObject = new Line(new Point(x1,y1),new Point(x2,y2));
   tempObject.setLayer(++maxLayer);
 	mainArray.push(tempObject);
-  console.log(maxLayer);
+  // console.log(maxLayer);
 	repaint();
 }
 
@@ -81,7 +82,7 @@ function addTriangle() {
   var tempObject = new Triangle(new Point(x1,y1),new Point(x2,y2), new Point(x3,y3));
   tempObject.setLayer(++maxLayer);
 	mainArray.push(tempObject);
-  console.log(maxLayer);
+  // console.log(maxLayer);
 	repaint();
 }
 
@@ -96,16 +97,17 @@ function addCircle() {
   var tempObject = new Circle(new Point(x,y),r);
   tempObject.setLayer(++maxLayer);
   mainArray.push(tempObject);
-  console.log(maxLayer);
+  // console.log(maxLayer);
   repaint();
 }
 
 function deleteElement() {
+  // console.log(mainArray.length);
 	if (selectedElements.length == 0) {
 		if (mainArray.length > 0) {
       var tempObject = mainArray[mainArray.length-1];
       if (maxLayer == tempObject.getLayer()) {
-        var prevLayer = maxLayer;
+        prevLayer = maxLayer;
         maxLayer = 0;
         for (var i = 0; i < mainArray.length; i++) {
           tempObject = mainArray[i];
@@ -119,14 +121,17 @@ function deleteElement() {
 		for (var i = 0; i < selectedIndexs.length; i++) {
       var tempObject = mainArray[selectedIndexs[i]];
       if (maxLayer == tempObject.getLayer()) {
+        prevLayer = maxLayer;
         maxLayer = 0;
         for (var g = 0; g < mainArray.length; g++) {
           tempObject = mainArray[g];
-          if (tempObject.getLayer() > maxLayer && maxLayer != prevLayer) maxLayer = tempObject.getLayer(); 
+          if (tempObject.getLayer() > maxLayer && tempObject.getLayer() != prevLayer) maxLayer = tempObject.getLayer(); 
         }
       }
-			delete mainArray[selectedIndexs[i]];
+      console.log(selectedIndexs[i]);
+			mainArray.splice(selectedIndexs[i],1);
 		}
+    // console.log(mainArray.length);
 		selectedElements = [];
 		selectedIndexs = [];
 		repaint();
@@ -141,9 +146,8 @@ function changeColor() {
   }
 }
 
-function repaint(){
+function repaint() {
   if (!frac)	g2d.clearRect(1,1,1198,748);
-
 	g2d.lineWidth = 2;
 	for (var f = 1; f <= maxLayer; f++) {
 	   for (var i = 0; i < mainArray.length; i++){
@@ -198,7 +202,7 @@ function repaint(){
 	   }
         
         g2d.strokeStyle = "#006400";
-        g2d.lineWidth = 8;
+        g2d.lineWidth = 4;
         
 	   for (var i = 0; i < selectedElements.length; i++){
 	   	var object = selectedElements[i];
@@ -286,7 +290,7 @@ function repaint(){
 
 
 	g2d.strokeStyle = "#0000FF";
-    g2d.lineWidth = 8;
+    g2d.lineWidth = 4;
     
 	var object = nearElement;
 	if (object instanceof Line) {
@@ -1079,7 +1083,7 @@ function circleBySegment(x1, y1, x2, y2, x3, y3, radius) {
     }	
 
 function dist(p1, p2) {
-  return Math.abs(p2.x-p1.x) * Math.abs(p2.x-p1.x) + Math.abs(p2.y - p1.y) * Math.abs(p2.y - p1.y); 
+  return Math.sqrt(Math.abs(p2.x-p1.x) * Math.abs(p2.x-p1.x) + Math.abs(p2.y - p1.y) * Math.abs(p2.y - p1.y)); 
 } 
 
 function belongsTrinagle(x,y, triangle) {
@@ -1089,8 +1093,12 @@ function belongsTrinagle(x,y, triangle) {
   var point3 = triangle.p3;
   var s = square(point1, point2, point3);
   var s1 = square(point1, point2, point4);
-  var s2 = square(point1, point2, point4);
-  var s3 = square(point1, point2, point4);
+  var s2 = square(point1, point3, point4);
+  var s3 = square(point3, point2, point4);
+  if (Math.abs(s1 + s2 + s3 - s) < 1) {
+    return true;
+  }
+  return false;
 }	
 
 function square(p1,p2,p3) {
@@ -1101,6 +1109,32 @@ function square(p1,p2,p3) {
   return Math.sqrt(p * (p - a) * (p - b)  * (p - c));
 }	
 
+function belongsRectangle(x,y,rectangle) {
+  var point1 = rectangle.p1;
+  var point2 = rectangle.p3;
+  if (point2.x > point1.x) {
+    if (point2.y > point1.y) {
+      if (x > point1.x && x < point2.x && y > point1.y && y < point2.y) return true;
+    } else {
+      if (x > point1.x && x < point2.x && y < point1.y && y > point2.y) return true;
+    }
+  } else {
+    if (point2.y > point1.y) {
+      if (x < point1.x && x > point2.x && y > point1.y && y < point2.y) return true;
+    } else {
+      if (x < point1.x && x > point2.x && y < point1.y && y > point2.y) return true;
+    }
+  }
+  return false;
+}
+
+function belongsCircle(x,y,circle) {
+  if (circle.radius/2 >= dist(circle.pC,new Point(x,y))) {
+    return true;
+  } 
+  return false;
+}
+
 function selectElement(q) {
 	if (q.localeCompare("Click") == 0) {
 		selectedElements = [];
@@ -1108,8 +1142,43 @@ function selectElement(q) {
 		select = false;
 		repaint();
 	}
+  var tempMaxLayer = maxLayer;
+  var ignorSelect = [];
+  var ignoreLayers = [];
 	for (var i = 0; i < mainArray.length; i++) {
 		var object = mainArray[i];
+    var contain = false;
+    for (var g = 0; g < ignorSelect.length; g++) {
+      if (ignorSelect[g] == i) {
+        contain = true;
+        break;
+      }
+    }
+    if (contain) continue;
+    var newStart = false;
+    // console.log(object + " " + mainArray.length);
+    if (object.getLayer() != tempMaxLayer) continue;
+    else {
+      // console.log(object.getLayer());
+      ignorSelect.push(i);
+      ignoreLayers.push(object.getLayer());
+      newStart = true;
+      var prevMaxLayer = -1;
+      for (var g = 0; g < mainArray.length; g++) {
+        var obj = mainArray[g];
+        var cont2 = true;
+        for (var j = 0; j < ignoreLayers.length; j++) {
+          if (ignoreLayers[j] == obj.getLayer())  {
+            cont2 = false;
+            break;
+          }
+        }
+        if (obj.getLayer() > prevMaxLayer && cont2) 
+          prevMaxLayer = obj.getLayer();
+      }
+      tempMaxLayer = prevMaxLayer;
+      // console.log(tempMaxLayer);
+    }
 		if (object instanceof Line) {
 			if (circleBySegment(object.p1.x, object.p1.y, object.p2.x, object.p2.y, xCircle, yCircle, radiusCircle)) {
                      if (q.localeCompare("Move") == 0) {
@@ -1126,35 +1195,7 @@ function selectElement(q) {
                      }
                 }
 		} else if (object instanceof Triangle) {
-                if (circleBySegment(object.p1.x, object.p1.y, object.p2.x, object.p2.y, xCircle, yCircle, radiusCircle)) {
-                     if (q.localeCompare("Move") == 0) {
-                         if (selectedIndexs.length != 0 && i == selectedIndexs[0]) return;
-                         nearElement = mainArray[i];
-                         repaint();
-                         break;
-                     } else {
-                        nearElement = 0;
-                        selectedElements.push(mainArray[i]);
-                        selectedIndexs.push(i);
-                        repaint();
-                        break;
-                     }
-                }
-                if (circleBySegment(object.p1.x, object.p1.y, object.p3.x, object.p3.y, xCircle, yCircle, radiusCircle)) {
-                     if (q.localeCompare("Move") == 0) {
-                         if (selectedIndexs.length != 0 && i == selectedIndexs[0]) return;
-                         nearElement = mainArray[i];
-                         repaint();
-                         break;
-                     } else {
-                        nearElement = 0;
-                        selectedElements.push(mainArray[i]);
-                        selectedIndexs.push(i);
-                        repaint();
-                        break;
-                     }
-                }
-                if (circleBySegment(object.p3.x, object.p3.y, object.p2.x, object.p2.y, xCircle, yCircle, radiusCircle)) {
+                if (belongsTrinagle(xCircle,yCircle,object)) {
                      if (q.localeCompare("Move") == 0) {
                          if (selectedIndexs.length != 0 && i == selectedIndexs[0]) return;
                          nearElement = mainArray[i];
@@ -1169,18 +1210,8 @@ function selectElement(q) {
                      }
                 }
 		} else if (object instanceof Rectangle) {
-			var uslBreak = false;
-            for (var j = 0; j < 4; j++) {
-                var p1;
-                var p2;
-                if (j == 3) {
-                    p1 = object.getPoint(j);
-                    p2 = object.getPoint(0);
-                } else {
-                    p1 = object.getPoint(j);
-                    p2 = object.getPoint(j + 1);
-                }
-                if (circleBySegment(p1.x, p1.y, p2.x, p2.y, xCircle, yCircle, radiusCircle)) {
+                if (belongsRectangle(xCircle,yCircle,object)) {
+                  // console.log("yes");
                     if (q.localeCompare("Move") == 0) {
                         if (selectedIndexs.length != 0 && i == selectedIndexs[0]) return;
                         nearElement = mainArray[i];
@@ -1196,30 +1227,87 @@ function selectElement(q) {
                         break;
                     }
                 }
-            }
-            if (uslBreak == true) {
-                break;
-            }
 		} else if (object instanceof Circle) {
-			    var dx = Math.abs(xCircle - object.pC.x);
-                var dy = Math.abs(yCircle - object.pC.y);
-                var distance = Math.sqrt(dx * dx + dy * dy);
-                if (Math.abs(distance - (radiusCircle + object.radius/2 -5)) < 5) {
-                	if (q.localeCompare("Move") == 0) {
-                        if (selectedIndexs.length != 0 && i == selectedIndexs[0]) return;
-                        nearElement = mainArray[i];
-                        repaint();
-                        break;
-                    } else {
-                        nearElement = 0;
-                        selectedElements.push(mainArray[i]);
-                        selectedIndexs.push(i);
-                        repaint();
-                        break;
-                    }
-                }
+      if (belongsCircle(xCircle,yCircle,object)) {
+      	if (q.localeCompare("Move") == 0) {
+              if (selectedIndexs.length != 0 && i == selectedIndexs[0]) return;
+              nearElement = mainArray[i];
+              repaint();
+              break;
+          } else {
+              nearElement = 0;
+              selectedElements.push(mainArray[i]);
+              selectedIndexs.push(i);
+              repaint();
+              break;
+          }
+      }
 		}
+    if (newStart) i = -1;
 	}
+}
+
+function onFrontLayer() {
+  maxLayer++;
+  for (var i = 0; i < selectedIndexs.length; i++) {
+    mainArray[selectedIndexs[i]].setLayer(maxLayer);
+  }
+  repaint();
+}
+
+function onBackLayer() {
+  maxLayer = 0;
+  for (var i = 0; i < selectedIndexs.length; i++) {
+    mainArray[selectedIndexs[i]].setLayer(1);
+    for (var g = 0; g < mainArray.length; g++) {
+      if (g != selectedIndexs[i]) mainArray[g].setLayer(mainArray[g].getLayer() + 1);
+      if (mainArray[g].getLayer() > maxLayer) maxLayer = mainArray[g].getLayer()
+    }
+  }
+  repaint();
+}
+
+function upLayer() {
+  for (var i = 0; i < selectedIndexs.length; i++) {
+    var object = mainArray[selectedIndexs[i]];
+    var objectLayer = object.getLayer();
+    var nextLayer = 999999;
+    var nextIndex = 0;
+    for (var g = 0; g < mainArray.length; g++) {
+      if (mainArray[g].getLayer() > objectLayer && mainArray[g].getLayer() < nextLayer && g != selectedIndexs[i]) {
+        nextLayer = mainArray[g].getLayer();
+        nextIndex = g;
+      }
+    }
+    mainArray[selectedIndexs[i]].setLayer(nextLayer);
+    mainArray[nextIndex].setLayer(objectLayer);
+    console.log(objectLayer + " " + nextLayer);
+  }
+  repaint();
+}
+
+function downLayer() {
+  for (var i = 0; i < selectedIndexs.length; i++) {
+    var object = mainArray[selectedIndexs[i]];
+    var objectLayer = object.getLayer();
+    var nextLayer = 0;
+    var nextIndex = 0;
+    var uslRun = false;
+    for (var g = 0; g < mainArray.length; g++) {
+      if (mainArray[g].getLayer() < objectLayer && mainArray[g].getLayer() > nextLayer && g != selectedIndexs[i]) {
+        nextLayer = mainArray[g].getLayer();
+        nextIndex = g;
+        uslRun = true;
+      }
+    }
+    if (uslRun) {
+      mainArray[selectedIndexs[i]].setLayer(nextLayer);
+      mainArray[nextIndex].setLayer(objectLayer);
+    } else {
+      return;
+    }
+  }
+  repaint();
 }
 
 
