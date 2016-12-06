@@ -56,7 +56,6 @@ function addRectangle() {
   var tempObject = new Rectangle(new Point(x1,y1),new Point(x2,y2));
   tempObject.setLayer(++maxLayer);
 	mainArray.push(tempObject);
-  // console.log(maxLayer);
 	repaint();
 }
 
@@ -68,7 +67,6 @@ function addLine() {
   var tempObject = new Line(new Point(x1,y1),new Point(x2,y2));
   tempObject.setLayer(++maxLayer);
 	mainArray.push(tempObject);
-  // console.log(maxLayer);
 	repaint();
 }
 
@@ -82,7 +80,6 @@ function addTriangle() {
   var tempObject = new Triangle(new Point(x1,y1),new Point(x2,y2), new Point(x3,y3));
   tempObject.setLayer(++maxLayer);
 	mainArray.push(tempObject);
-  // console.log(maxLayer);
 	repaint();
 }
 
@@ -97,12 +94,10 @@ function addCircle() {
   var tempObject = new Circle(new Point(x,y),r);
   tempObject.setLayer(++maxLayer);
   mainArray.push(tempObject);
-  // console.log(maxLayer);
   repaint();
 }
 
 function deleteElement() {
-  // console.log(mainArray.length);
 	if (selectedElements.length == 0) {
 		if (mainArray.length > 0) {
       var tempObject = mainArray[mainArray.length-1];
@@ -131,7 +126,6 @@ function deleteElement() {
       console.log(selectedIndexs[i]);
 			mainArray.splice(selectedIndexs[i],1);
 		}
-    // console.log(mainArray.length);
 		selectedElements = [];
 		selectedIndexs = [];
 		repaint();
@@ -155,7 +149,6 @@ function repaint() {
       if (object.getLayer() != f) continue;
         if (object != null) 
         g2d.fillStyle = g2d.strokeStyle = object.getColor();
-    
         else g2d.strokeStyle = "#000000"; 
 	   	if (object instanceof Line) {
 	   		var p1 = object.p1;
@@ -442,12 +435,10 @@ function pushing() {
    for (var k = 0; k < rectangles.length-1; k++) {
     if (ob.p1.x > rectangles[k].p1.x && ob.p1.x < rectangles[k+1].p1.x) {
       rectangles.splice(k+1,0,ob);
-      // console.log(k+1);
       break;
     }
    }
  }
- // console.log(temp.length);
  temp = [];
 }
 
@@ -460,23 +451,21 @@ function fractal() {
 
   iterationCount = prompt("Введите количество итераций:");
   if (iterationCount.localeCompare("") == 0) {
+    alert("Вы не ввели кол-во итераций!");
     iterationCount = 0;
   }
   var sum = 0;
   var d = 1;
   for (var i = 0; i <= iterationCount; i++) {
     countRectangles = 2 * countRectangles + 1;
-    // console.log(countRectangles);
   }
   if (iterationCount > 5)  width = (1160-30)/countRectangles+2;
-  // console.log(countRectangles);
   mainArray = [];
   rectangles = [];
   selectedElements = [];
   selectedIndexs = [];
   select = false;
   frac = true;
-
   tempLength = 0;
   pozition = 1;
   tempIndex = 0;
@@ -527,10 +516,7 @@ function fractal() {
            }
         } 
         else {
-           // console.log("not");
-           // console.log(rectangles);
            tempIndex++;
-           // console.log(tempIndex);
            lines = [];
         }
       } 
@@ -540,7 +526,6 @@ function fractal() {
       recountFractal();
     }
     tempLength += step2;
-    // console.log(tempLength);
     drowFractal();
   }, 5);
 }
@@ -566,16 +551,11 @@ function recountFractal() {
     lines = [];
     var center1 = (r1.p2.x + r1.p1.x) / 2;
     var center2 = (r2.p2.x + r2.p1.x) / 2;
-    // console.log(center1 + " " + center2);
     center = new Point((center2+center1)/2,730);
-    // console.log(center);
     heigth = (r2.p1.y-r2.p4.y + r1.p1.y-r1.p4.y)/2;
     if (iterationCount < 6) width = (r1.p2.x-r1.p1.x + r2.p2.x-r2.p1.x)/2;
-    // width = (r2.p2.x-r2.p1.x)/4;
-    // console.log(width);
     maxLength = heigth;
     oldPoint = new Point(center.x - width/2,730);
-    // console.log(oldPoint);
     newPoint = new Point(oldPoint.x,oldPoint.y);
     lines.push(new Line(new Point(oldPoint.x,oldPoint.y),new Point(newPoint.x,newPoint.y)));
   } else if (pozition == 2) {
@@ -622,7 +602,6 @@ function load() {
   b.innerHTML = "Загрузить";
   tmp.innerHTML = '<p>Выберите лист</p></br><input type="radio" name="loadMode" value="local" checked>' + st[0];
   for (var i = 1; i < st.length; i++) {
-    // alert(st[i]);
     tmp.innerHTML += '</br><input type="radio" name="loadMode" value="local">' + st[i];
   }
 
@@ -677,7 +656,6 @@ function show () {
     b.innerHTML = "Показать";
     tmp.innerHTML = '<input type="checkbox" name="a0">' + st[0];
     for (var i = 1; i < st.length; i++) {
-      // alert(st[i]);
       tmp.innerHTML += '</br><input type="checkbox" name="a' + i + '">' + st[i];
     }
     condShow = true;
@@ -734,7 +712,6 @@ function morfing(){
   b.innerHTML = "Показать";
   tmp.innerHTML = '<input type="checkbox" name="a0">' + st[0];
   for (var i = 1; i < st.length; i++) {
-    // alert(st[i]);
     tmp.innerHTML += '</br><input type="checkbox" name="a' + i + '">' + st[i];
   }
   condShow = true;
@@ -751,9 +728,6 @@ function morfingLists(){
   for (var i = 0; i < st.length; i++) {
      var r=document.getElementsByName("a" + i);
      if (r[0].checked) {
-      // if (!f) index = i;
-      // f = true;
-      console.log("Выбран лист: " + st[i]);
       indexs.push(i);
      }
   }
@@ -773,7 +747,6 @@ function morfingLists(){
 }
 
 function recountMorfing(index){
-  // console.log(index);
   var listArrays = readCookie("ListArrays");
   var st = listArrays.split(',');
   tempList = [];
@@ -782,8 +755,6 @@ function recountMorfing(index){
   mainArray = [];
   var tempListName = st[indexs[index]];
   var nextListName;
-  // console.log(tempListName);
-  // console.log(nextListName);
   if (indexs.length == index + 1) {
     nextListName = st[indexs[0]];
   }
@@ -794,17 +765,13 @@ function recountMorfing(index){
   var arrayList = StringToArray(stroke); 
   var stroke2 = readCookie(nextListName);
   var arrayList2 = StringToArray(stroke2);  
-  // console.log(stroke);
-  // console.log(stroke2);
   var morfIndexs = [];
   var usl = false;
   for (var i = 0;i < arrayList.length; i++) {
     var tmp = arrayList[i];
-    if (tmp instanceof Triangle) console.log("tmp");
     var find = false;
     for(var j = 0; j < arrayList2.length; j++) {
       var tmp2 = arrayList2[j];
-      if (tmp2 instanceof Triangle) console.log("tmp2");
       var cond = false;
       for (var k = 0;k < morfIndexs.length; k++){
         if (j == morfIndexs[k]) {
@@ -830,23 +797,21 @@ function recountMorfing(index){
     }
   }
   if (tempList.length == 0) {
-        alert("Нет листов подходящих для морфинга");
-        document.getElementById("win").style.display="none";
-        $(".hideButtons").show();
-        document.getElementById("showButton").src="Pictures/show.png";
-        condShow = false;
-        morfingMoveElements =[];
-        mainArray = [];
-        usl = true;
-        var tmp = document.getElementById("info");
-         tmp.innerHTML = "";
-        repaint();
-        timer = setTimeout(tick, 10000000);
-       // t = 0;
-        //index = 0;
-        clearTimeout(timer);
-        return;
-      }
+    alert("Выбранные листы не подходят для морфинга");
+    document.getElementById("win").style.display="none";
+    $(".hideButtons").show();
+    document.getElementById("showButton").src="Pictures/show.png";
+    condShow = false;
+    morfingMoveElements =[];
+    mainArray = [];
+    usl = true;
+    var tmp = document.getElementById("info");
+     tmp.innerHTML = "";
+    repaint();
+    timer = setTimeout(tick, 10000000);
+    clearTimeout(timer);
+    return;
+  }
 }
 
 function showMorfingLists(t) {
@@ -855,7 +820,6 @@ function showMorfingLists(t) {
       var object = tempList[i];
       var object2 = nextList[i];
       var result;
-
     if (object instanceof Circle) {
       var tmp = object;
       var tmp2 = object2;
@@ -904,33 +868,31 @@ function showMorfingLists(t) {
 function check(){
   var r=document.getElementsByName("mode");
   if(r[0].checked){
-    console.log("Выбран локальный режим");
     local = true;
   } else {
-  	console.log("Выбран глобальный режим");
   	local = false;
   }
 }
 
 function createCookie(name,value,days) {
-        if (days) {
-                var date = new Date();
-                date.setTime(date.getTime()+(days*24*60*60*1000));
-                var expires = "; expires="+date.toGMTString();
-        }
-        else var expires = "";
-        document.cookie = name+"="+escape(value)+expires+"; path=/";
+  if (days) {
+          var date = new Date();
+          date.setTime(date.getTime()+(days*24*60*60*1000));
+          var expires = "; expires="+date.toGMTString();
+  }
+  else var expires = "";
+  document.cookie = name+"="+escape(value)+expires+"; path=/";
 }
 
 function readCookie(name) {
-        var nameEQ = name + "=";
-        var ca = document.cookie.split(';');
-        for(var i=0;i < ca.length;i++) {
-                var c = ca[i];
-                while (c.charAt(0)==' ') c = c.substring(1,c.length);
-                if (c.indexOf(nameEQ) == 0) return unescape(c.substring(nameEQ.length,c.length));
-        }
-        return null;
+  var nameEQ = name + "=";
+  var ca = document.cookie.split(';');
+  for(var i=0;i < ca.length;i++) {
+          var c = ca[i];
+          while (c.charAt(0)==' ') c = c.substring(1,c.length);
+          if (c.indexOf(nameEQ) == 0) return unescape(c.substring(nameEQ.length,c.length));
+  }
+  return null;
 }
 
 function eraseCookie(name) {
@@ -938,37 +900,29 @@ function eraseCookie(name) {
 }
 
 document.getElementById('draw').onmousemove = function(e) {
-        if (condShow) return;
-			  var x = e.offsetX==undefined?e.layerX:e.offsetX;
-			  var y = e.offsetY==undefined?e.layerY:e.offsetY;
-			  xCircle = x;
-	          yCircle = y; 
-	          nearElement = 0;
-	          finishPoint = new Point(x,y);
-	          if (mousedown && startPoint instanceof Point && finishPoint instanceof Point) {
-	          	// if (mousedown)
-	          	//   selectElement("Drag");
-	          	  motion(finishPoint.x - startPoint.x, finishPoint.y - startPoint.y);
-	          	  startPoint = finishPoint;
-	          } else {
-	              selectElement("Move");
-	          }
-	          repaint();
-			  //console.log(x +'x'+ y);
-			}
+  if (condShow) return;
+  var x = e.offsetX==undefined?e.layerX:e.offsetX;
+  var y = e.offsetY==undefined?e.layerY:e.offsetY;
+  xCircle = x;
+  yCircle = y; 
+  nearElement = 0;
+  finishPoint = new Point(x,y);
+  if (mousedown && startPoint instanceof Point && finishPoint instanceof Point) {
+  	  motion(finishPoint.x - startPoint.x, finishPoint.y - startPoint.y);
+  	  startPoint = finishPoint;
+  } else {
+      selectElement("Move");
+  }
+  repaint();
+}
 document.getElementById('draw').onclick = function(e) {
   if (condShow) return;
 			  var x = e.offsetX==undefined?e.layerX:e.offsetX;
 			  var y = e.offsetY==undefined?e.layerY:e.offsetY;
-			  // console.log(x +'x'+ y);
 			  startPoint = new Point(x, y);
 	          xCircle = x;
 	          yCircle = y;
-	         
-	          // for (var i= 0; i < selectedElements.length; i++) {
-	          // 	console.log(selectedElements[i].toString());
-	          // }
-			}
+}
 document.getElementById('draw').onmousedown = function(e) {
   if (condShow) return;
   var x = e.offsetX==undefined?e.layerX:e.offsetX;
@@ -978,7 +932,6 @@ document.getElementById('draw').onmousedown = function(e) {
   mousedown = true;
   startPoint = new Point(x, y);
   selectElement("Click");
-  //console.log(x +'x'+ y + "mousedown");
 }
 
 document.getElementById('draw').onmouseup = function(e) {
@@ -990,14 +943,10 @@ document.getElementById('draw').onmouseup = function(e) {
   mousedown = false;
   startPoint = 0;
   finishPoint = 0;
-  //console.log(x +'x'+ y + "mouseup");
 }
 
 document.getElementById('draw').ondblclick = function(e) {
   if (condShow) return;
-  // if (e.which == 3) {
-  	console.log("right");
-  // }
 }
 
 document.getElementById('draw').onwheel = function(e) {
@@ -1054,39 +1003,39 @@ function rotate(delta) {
 	var angle = 5.0 / 360. * 2.0 * Math.PI;
 	if (local) {
 	    if (delta < 0) {
-	    		for (var i = 0; i < selectedElements.length; i++) {
-            	var element = selectedElements[i];
-            	var x = element.pC.x;
-            	var y = element.pC.y;
-            	element.shift(-x,-y);
-            	element.rotate(angle);
-            	element.shift(x,y);
-            }
+	    	for (var i = 0; i < selectedElements.length; i++) {
+          	var element = selectedElements[i];
+          	var x = element.pC.x;
+          	var y = element.pC.y;
+          	element.shift(-x,-y);
+          	element.rotate(angle);
+          	element.shift(x,y);
+          }
 	    } else {
-            for (var i = 0; i < selectedElements.length; i++) {
-            	var element = selectedElements[i];
-            	var x = element.pC.x;
-            	var y = element.pC.y;
-            	element.shift(-x,-y);
-            	element.rotate(-angle);
-            	element.shift(x,y);
-            }
+        for (var i = 0; i < selectedElements.length; i++) {
+        	var element = selectedElements[i];
+        	var x = element.pC.x;
+        	var y = element.pC.y;
+        	element.shift(-x,-y);
+        	element.rotate(-angle);
+        	element.shift(x,y);
+        }
 	    }
 	} else {
 		if (delta < 0) {
-	        for (var i = 0; i < selectedElements.length; i++) {
-            	var element = selectedElements[i];
-            	var x = element.pC.x;
-            	var y = element.pC.y;
-            	element.rotate(angle);
-            }
+	     for (var i = 0; i < selectedElements.length; i++) {
+        	var element = selectedElements[i];
+        	var x = element.pC.x;
+        	var y = element.pC.y;
+        	element.rotate(angle);
+        }
 	    } else {
-            for (var i = 0; i < selectedElements.length; i++) {
-            	var element = selectedElements[i];
-            	var x = element.pC.x;
-            	var y = element.pC.y;
-            	element.rotate(-angle);
-            }
+        for (var i = 0; i < selectedElements.length; i++) {
+        	var element = selectedElements[i];
+        	var x = element.pC.x;
+        	var y = element.pC.y;
+        	element.rotate(-angle);
+        }
 	    }
 	}
 }
@@ -1136,7 +1085,7 @@ function square(p1,p2,p3) {
   var a = dist(p1,p2);
   var b = dist(p2,p3);
   var c = dist(p1,p3);
-  var p = (a + b + c) / 2; // полупериметр
+  var p = (a + b + c) / 2; 
   return Math.sqrt(p * (p - a) * (p - b)  * (p - c));
 }	
 
@@ -1187,10 +1136,8 @@ function selectElement(q) {
     }
     if (contain) continue;
     var newStart = false;
-    // console.log(object + " " + mainArray.length);
     if (object.getLayer() != tempMaxLayer) continue;
     else {
-      // console.log(object.getLayer());
       ignorSelect.push(i);
       ignoreLayers.push(object.getLayer());
       newStart = true;
@@ -1208,56 +1155,54 @@ function selectElement(q) {
           prevMaxLayer = obj.getLayer();
       }
       tempMaxLayer = prevMaxLayer;
-      // console.log(tempMaxLayer);
     }
 		if (object instanceof Line) {
 			if (circleBySegment(object.p1.x, object.p1.y, object.p2.x, object.p2.y, xCircle, yCircle, radiusCircle)) {
-                     if (q.localeCompare("Move") == 0) {
-                         if (selectedIndexs.length != 0 && i == selectedIndexs[0]) return;
-                         nearElement = mainArray[i];
-                         repaint();
-                         break;
-                     } else {
-                        nearElement = 0;
-                        selectedElements.push(mainArray[i]);
-                        selectedIndexs.push(i);
-                        repaint();
-                        break;
-                     }
-                }
+        if (q.localeCompare("Move") == 0) {
+          if (selectedIndexs.length != 0 && i == selectedIndexs[0]) return;
+          nearElement = mainArray[i];
+          repaint();
+          break;
+          } else {
+             nearElement = 0;
+             selectedElements.push(mainArray[i]);
+             selectedIndexs.push(i);
+             repaint();
+             break;
+          }
+        }
 		} else if (object instanceof Triangle) {
-                if (belongsTrinagle(xCircle,yCircle,object)) {
-                     if (q.localeCompare("Move") == 0) {
-                         if (selectedIndexs.length != 0 && i == selectedIndexs[0]) return;
-                         nearElement = mainArray[i];
-                         repaint();
-                         break;
-                     } else {
-                        nearElement = 0;
-                        selectedElements.push(mainArray[i]);
-                        selectedIndexs.push(i);
-                        repaint();
-                        break;
-                     }
-                }
+      if (belongsTrinagle(xCircle,yCircle,object)) {
+           if (q.localeCompare("Move") == 0) {
+               if (selectedIndexs.length != 0 && i == selectedIndexs[0]) return;
+               nearElement = mainArray[i];
+               repaint();
+               break;
+           } else {
+              nearElement = 0;
+              selectedElements.push(mainArray[i]);
+              selectedIndexs.push(i);
+              repaint();
+              break;
+           }
+      }
 		} else if (object instanceof Rectangle) {
-                if (belongsRectangle(xCircle,yCircle,object)) {
-                  // console.log("yes");
-                    if (q.localeCompare("Move") == 0) {
-                        if (selectedIndexs.length != 0 && i == selectedIndexs[0]) return;
-                        nearElement = mainArray[i];
-                        repaint();
-                        uslBreak = true;
-                        break;
-                    } else {
-                        nearElement = 0;
-                        selectedElements.push(mainArray[i]);
-                        selectedIndexs.push(i);
-                        uslBreak= true;
-                        repaint();
-                        break;
-                    }
-                }
+      if (belongsRectangle(xCircle,yCircle,object)) {
+          if (q.localeCompare("Move") == 0) {
+              if (selectedIndexs.length != 0 && i == selectedIndexs[0]) return;
+              nearElement = mainArray[i];
+              repaint();
+              uslBreak = true;
+              break;
+          } else {
+              nearElement = 0;
+              selectedElements.push(mainArray[i]);
+              selectedIndexs.push(i);
+              uslBreak= true;
+              repaint();
+              break;
+          }
+      }
 		} else if (object instanceof Circle) {
       if (belongsCircle(xCircle,yCircle,object)) {
       	if (q.localeCompare("Move") == 0) {
