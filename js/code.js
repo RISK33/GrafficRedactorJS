@@ -1255,9 +1255,9 @@ function upLayer() {
         nextIndex = g;
       }
     }
+    if (nextLayer == 999999) return;
     mainArray[selectedIndexs[i]].setLayer(nextLayer);
     mainArray[nextIndex].setLayer(objectLayer);
-    console.log(objectLayer + " " + nextLayer);
   }
   repaint();
 }
